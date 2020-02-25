@@ -24,13 +24,8 @@ def saturation(base, column):
     return bases[base] + str(percentages[i])
     
 #Get the name of the file for the window title.
-last_slash = 0
-position = 0
-for char in sys.argv[1]:
-    if (char == '/'):
-        last_slash = position
-    position += 1
-title = sys.argv[1].split(".",1)[0][last_slash + 1:]
+file_name = sys.argv[1]
+title = file_name[file_name.rfind('/') + 1:].split(".",1)[0]
 
 # Window generation, pretty standard stuff. 
 window = tkinter.Tk()
