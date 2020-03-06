@@ -11,6 +11,7 @@ bases_and_saturation = {"adenine25":"RoyalBlue1", "adenine50":"RoyalBlue2", "ade
                         "thymine25":"firebrick1", "thymine50":"firebrick2", "thymine75":"firebrick3", "thymine100":"firebrick4",
                         "guanine25":"PaleGreen1", "guanine50":"PaleGreen2", "guanine75":"PaleGreen3", "guanine100":"PaleGreen4",
                         "cytosine25":"MediumPurple1", "cytosine50":"MediumPurple2", "cytosine75":"MediumPurple3", "cytosine100":"MediumPurple4"}
+legend = "\n-  +\n     Adenine\n     Thymine\n     Guanine\n     Cytosine"
 
 # Functions to calculate the color assigned to each of the letters. 
 def calculate_percentage(base, column):
@@ -23,7 +24,7 @@ def saturation(base, column):
         i += 1
     return bases[base] + str(percentages[i])
     
-#Get the name of the file for the window title.
+# Get the name of the file for the window title.
 file_name = sys.argv[1]
 title = file_name[file_name.rfind('/') + 1:].split(".",1)[0]
 
@@ -32,6 +33,7 @@ window = tkinter.Tk()
 window.title(title)
 font_style = tkinter.font.Font(family="Courier New", size=18, weight = "bold")
 sequence = tkinter.scrolledtext.ScrolledText(window, font = font_style, wrap = tkinter.NONE)
+title_and_legend = tkinter.scrolledtext.ScrolledText(window, font = font_style, width = 35, wrap = tkinter.NONE)
 
 # Experimenting with some scrolling. 
 sequence_frame = tkinter.Frame(window, borderwidth = 1, relief = "sunken")
@@ -41,6 +43,7 @@ sequence['xscroll'] = vscroll.set
 # To build the data frame, first we create a list of base arrays based on the file that has been provided.
 sequences = []
 string = "" # Used to display the sequences in the window.
+titles = "" # Used to display the titles of each of the sequences. 
 line_counter = 0
 with open(sys.argv[1], 'r') as fragment_file:
     for line in fragment_file:
@@ -49,9 +52,13 @@ with open(sys.argv[1], 'r') as fragment_file:
             string += line
             clean_line = line.strip() # Done so the sequences don't include the \n part, which might become an issue.
             sequences.append(list(clean_line))
+        else:
+            titles += line
 sequences_dataframe = pandas.DataFrame(sequences)
 string = string.strip() # Since some fasta files might have an empty line at the end, we get rid of it.
 sequence.insert(tkinter.INSERT, string)
+title_and_legend.insert(tkinter.INSERT, titles)
+title_and_legend.insert(tkinter.INSERT, legend)
 
 # Prepare each of the tags to be added to the string. If the third arg is 0, then the background will be colored, else, the letters.
 for key, value in bases_and_saturation.items():
@@ -59,6 +66,7 @@ for key, value in bases_and_saturation.items():
         sequence.tag_configure(key, background = value)
     else:
         sequence.tag_configure(key, foreground = value)
+    title_and_legend.tag_configure(key, background = value)
 
 consensus = "" # Concensus sequence that is gonna be added at the end of the string.
 for i in range(len(sequences_dataframe.columns)):
@@ -89,9 +97,18 @@ for i in sequences_dataframe:
 for i in range(len(sequences_dataframe.columns)):
     sequence.tag_add(bases[consensus[i]] + '100', str(len(sequences_dataframe.index) + 2) + '.' + str(i))
 
+# Add the tags to the legend
+line_counter = len(sequences_dataframe.index) + 3
+for value in bases.values():
+    for i in range(len(bases)):
+        title_and_legend.tag_add(value + str(percentages[i]), str(line_counter) + '.' + str(i))
+    line_counter += 1
+
 # Testing the window display.
+title_and_legend.configure(state = 'disabled')
 sequence.configure(state = 'disabled')
 vscroll.pack(side = "bottom", fill = 'x')
-sequence.pack(expand = True, fill = tkinter.BOTH)
+title_and_legend.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT)
+sequence.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT)
 sequence_frame.place()
 window.mainloop()
