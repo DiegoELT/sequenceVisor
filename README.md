@@ -18,7 +18,7 @@ To use **sequenceVisor**, it should be noted that your `.fasta` file must have t
 
 ```
 >Header
-<sequences>
+<sequence>
 >Header
 <sequence>
 ...
