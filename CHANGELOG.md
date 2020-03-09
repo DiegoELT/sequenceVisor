@@ -1,8 +1,21 @@
 # Changelog
 
-Most of the changes that I am doing to this project will be documented in the following file.
+Most of the changes that I am doing to this project will be documented in the following file
 
-## [0.0.3]
+## [0.0.4]
+
+### Added
+
+* Different display modes (changing the background and the foreground) which can be set through parameters
+* Added a parameter to change the font size (by default is 18)
+* Now there's a message that explains the usage of the application. 
+
+### Changed
+
+* Default font is now regular instead of bold.
+* Switcher instead of if statements for configuring the tags.
+
+## [0.0.3]
 
 ### Added
 
@@ -13,17 +26,17 @@ Most of the changes that I am doing to this project will be documented in the fo
 
 * Packing the different widgets in the window. Now done to the left. 
 
-## [0.0.2]
+## [0.0.2]
 
 ### Added 
 
 * Changelog file.
 
-### Changed
+### Changed
 
 * The way of obtaining the `title` of the TkInter window is cleaner.
 
-## [0.0.1] 
+## [0.0.1] 
 
 ### Added
 

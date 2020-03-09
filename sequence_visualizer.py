@@ -12,6 +12,22 @@ bases_and_saturation = {"adenine25":"RoyalBlue1", "adenine50":"RoyalBlue2", "ade
                         "guanine25":"PaleGreen1", "guanine50":"PaleGreen2", "guanine75":"PaleGreen3", "guanine100":"PaleGreen4",
                         "cytosine25":"MediumPurple1", "cytosine50":"MediumPurple2", "cytosine75":"MediumPurple3", "cytosine100":"MediumPurple4"}
 legend = "\n-  +\n     Adenine\n     Thymine\n     Guanine\n     Cytosine"
+display_size = 18
+
+# Functions to be used by the switcher depending on the display mode.
+def display_zero():
+    sequence.tag_configure(key, background = value)
+def display_one():
+    sequence.tag_configure(key, foreground = value)
+def display_two():
+    sequence.tag_configure(key, background = value, foreground = "white")
+def display_three():
+    sequence.tag_configure(key, background = value, foreground = value)
+
+def display_configure(number):
+    switcher = {0: display_zero, 1: display_one, 2: display_two, 3: display_three}
+    func = switcher.get(number, lambda: "Invalid display")
+    func()
 
 # Functions to calculate the color assigned to each of the letters. 
 def calculate_percentage(base, column):
@@ -31,7 +47,9 @@ title = file_name[file_name.rfind('/') + 1:].split(".",1)[0]
 # Window generation, pretty standard stuff. 
 window = tkinter.Tk()
 window.title(title)
-font_style = tkinter.font.Font(family="Courier New", size=18, weight = "bold")
+if(len(sys.argv) >= 4):
+    display_size = sys.argv[3]
+font_style = tkinter.font.Font(family="Courier New", size=display_size)
 sequence = tkinter.scrolledtext.ScrolledText(window, font = font_style, wrap = tkinter.NONE)
 title_and_legend = tkinter.scrolledtext.ScrolledText(window, font = font_style, width = 35, wrap = tkinter.NONE)
 
@@ -61,11 +79,15 @@ title_and_legend.insert(tkinter.INSERT, titles)
 title_and_legend.insert(tkinter.INSERT, legend)
 
 # Prepare each of the tags to be added to the string. If the third arg is 0, then the background will be colored, else, the letters.
+if (len(sys.argv) < 3 or len(sys.argv) > 4):
+    print("Usage of the sequence visor:\npython sequence_visualizer.py <fasta_file> <display_mode> <font_size>\n\nDisplay modes:\n0: Colored background, black letters.\n1: Colored letters, no background.\n2: Colored background, white letters.\n3: Colored background, no letters.\n\nFont size is by default 18pt.")
+    exit()
+
 for key, value in bases_and_saturation.items():
-    if(sys.argv[2] == '0'):
-        sequence.tag_configure(key, background = value)
+    if (int(sys.argv[2]) >= 0 and int(sys.argv[2]) <= 3):
+        display_configure(int(sys.argv[2]))
     else:
-        sequence.tag_configure(key, foreground = value)
+        print("Invalid display configuration. The sequence will show up as regular text.")
     title_and_legend.tag_configure(key, background = value)
 
 consensus = "" # Concensus sequence that is gonna be added at the end of the string.
