@@ -2,6 +2,12 @@
 
 Most of the changes that I am doing to this project will be documented in the following file
 
+## [0.0.5]
+
+### Changed
+
+* Width of the label widget is smaller.
+
 ## [0.0.4]
 
 ### Added

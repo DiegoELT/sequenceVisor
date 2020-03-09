@@ -48,10 +48,10 @@ title = file_name[file_name.rfind('/') + 1:].split(".",1)[0]
 window = tkinter.Tk()
 window.title(title)
 if(len(sys.argv) >= 4):
-    display_size = sys.argv[3]
+    display_size = int(sys.argv[3])
 font_style = tkinter.font.Font(family="Courier New", size=display_size)
 sequence = tkinter.scrolledtext.ScrolledText(window, font = font_style, wrap = tkinter.NONE)
-title_and_legend = tkinter.scrolledtext.ScrolledText(window, font = font_style, width = 35, wrap = tkinter.NONE)
+title_and_legend = tkinter.scrolledtext.ScrolledText(window, font = font_style, width = display_size, wrap = tkinter.NONE)
 
 # Experimenting with some scrolling. 
 sequence_frame = tkinter.Frame(window, borderwidth = 1, relief = "sunken")
@@ -87,7 +87,8 @@ for key, value in bases_and_saturation.items():
     if (int(sys.argv[2]) >= 0 and int(sys.argv[2]) <= 3):
         display_configure(int(sys.argv[2]))
     else:
-        print("Invalid display configuration. The sequence will show up as regular text.")
+        print("Invalid display configuration.")
+        exit()
     title_and_legend.tag_configure(key, background = value)
 
 consensus = "" # Concensus sequence that is gonna be added at the end of the string.
@@ -130,7 +131,7 @@ for value in bases.values():
 title_and_legend.configure(state = 'disabled')
 sequence.configure(state = 'disabled')
 vscroll.pack(side = "bottom", fill = 'x')
-title_and_legend.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT)
+title_and_legend.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT, padx = 0, pady = 0)
 sequence.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT)
 sequence_frame.place()
 window.mainloop()
