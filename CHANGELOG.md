@@ -1,6 +1,17 @@
 # Changelog
 
-Most of the changes that I am doing to this project will be documented in the following file
+Most of the changes that I am doing to this project will be documented in the following file.
+
+## [0.0.6]
+
+### Added
+
+* `.gitignore` file.
+
+### Changed
+
+* Fixed a bug which would make the program crash if arguments were less than 3.
+* Updated the `README.md`. 
 
 ## [0.0.5]
 

@@ -58,6 +58,11 @@ sequence_frame = tkinter.Frame(window, borderwidth = 1, relief = "sunken")
 vscroll = tkinter.Scrollbar(sequence_frame, orient = tkinter.HORIZONTAL, command = sequence.xview)
 sequence['xscroll'] = vscroll.set
 
+# Check if the amount of arguments is the right one.
+if (len(sys.argv) < 3 or len(sys.argv) > 4):
+    print("Usage of the sequence visor:\npython sequence_visualizer.py <fasta_file> <display_mode> <font_size>\n\nDisplay modes:\n0: Colored background, black letters.\n1: Colored letters, no background.\n2: Colored background, white letters.\n3: Colored background, no letters.\n\nFont size is by default 18pt.")
+    exit()
+
 # To build the data frame, first we create a list of base arrays based on the file that has been provided.
 sequences = []
 string = "" # Used to display the sequences in the window.
@@ -78,11 +83,7 @@ sequence.insert(tkinter.INSERT, string)
 title_and_legend.insert(tkinter.INSERT, titles)
 title_and_legend.insert(tkinter.INSERT, legend)
 
-# Prepare each of the tags to be added to the string. If the third arg is 0, then the background will be colored, else, the letters.
-if (len(sys.argv) < 3 or len(sys.argv) > 4):
-    print("Usage of the sequence visor:\npython sequence_visualizer.py <fasta_file> <display_mode> <font_size>\n\nDisplay modes:\n0: Colored background, black letters.\n1: Colored letters, no background.\n2: Colored background, white letters.\n3: Colored background, no letters.\n\nFont size is by default 18pt.")
-    exit()
-
+# Prepare each of the tags to be added to the string, and set up the configuration.
 for key, value in bases_and_saturation.items():
     if (int(sys.argv[2]) >= 0 and int(sys.argv[2]) <= 3):
         display_configure(int(sys.argv[2]))
