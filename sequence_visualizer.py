@@ -47,20 +47,22 @@ title = file_name[file_name.rfind('/') + 1:].split(".",1)[0]
 # Window generation, pretty standard stuff. 
 window = tkinter.Tk()
 window.title(title)
+
+# Scrollbar testing
+title_and_legend_frame = tkinter.Frame(window)
+title_and_legend_scrollbar = tkinter.Scrollbar(title_and_legend_frame, orient = tkinter.HORIZONTAL)
+sequences_frame = tkinter.Frame(window)
+sequences_scrollbar = tkinter.Scrollbar(sequences_frame, orient = tkinter.HORIZONTAL)
+
 if(len(sys.argv) >= 4):
     display_size = int(sys.argv[3])
 font_style = tkinter.font.Font(family="Courier New", size=display_size)
-sequence = tkinter.scrolledtext.ScrolledText(window, font = font_style, wrap = tkinter.NONE)
-title_and_legend = tkinter.scrolledtext.ScrolledText(window, font = font_style, width = display_size, wrap = tkinter.NONE)
-
-# Experimenting with some scrolling. 
-sequence_frame = tkinter.Frame(window, borderwidth = 1, relief = "sunken")
-vscroll = tkinter.Scrollbar(sequence_frame, orient = tkinter.HORIZONTAL, command = sequence.xview)
-sequence['xscroll'] = vscroll.set
+title_and_legend = tkinter.scrolledtext.ScrolledText(title_and_legend_frame, font = font_style, width = display_size + 10, wrap = tkinter.NONE, xscrollcommand = title_and_legend_scrollbar.set) 
+sequence = tkinter.scrolledtext.ScrolledText(sequences_frame, font = font_style, wrap = tkinter.NONE, xscrollcommand = sequences_scrollbar.set)
 
 # Check if the amount of arguments is the right one.
 if (len(sys.argv) < 3 or len(sys.argv) > 4):
-    print("Usage of the sequence visor:\npython sequence_visualizer.py <fasta_file> <display_mode> <font_size>\n\nDisplay modes:\n0: Colored background, black letters.\n1: Colored letters, no background.\n2: Colored background, white letters.\n3: Colored background, no letters.\n\nFont size is by default 18pt.")
+    print("Usage of the sequence visor:\npython sequence_visualizer.py <fasta_file> <display_mode> <font_size>\n\nDisplay modes:\n0: Coltkiored background, black letters.\n1: Colored letters, no background.\n2: Colored background, white letters.\n3: Colored background, no letters.\n\nFont size is by default 18pt.")
     exit()
 
 # To build the data frame, first we create a list of base arrays based on the file that has been provided.
@@ -131,8 +133,16 @@ for value in bases.values():
 # Testing the window display.
 title_and_legend.configure(state = 'disabled')
 sequence.configure(state = 'disabled')
-vscroll.pack(side = "bottom", fill = 'x')
-title_and_legend.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT, padx = 0, pady = 0)
-sequence.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT)
-sequence_frame.place()
+
+title_and_legend.pack(expand = True, fill = tkinter.BOTH)
+sequence.pack(expand = True, fill = tkinter.BOTH)
+
+title_and_legend_scrollbar.pack(side = tkinter.BOTTOM, fill = tkinter.X)
+sequences_scrollbar.pack(side = tkinter.BOTTOM, fill = tkinter.X)
+
+title_and_legend_frame.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT)
+sequences_frame.pack(expand = True, fill = tkinter.BOTH, side = tkinter.LEFT)
+
+title_and_legend_scrollbar.config(command = title_and_legend.xview)
+sequences_scrollbar.config(command = sequence.xview)
 window.mainloop()
