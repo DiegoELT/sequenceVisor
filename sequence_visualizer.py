@@ -47,8 +47,6 @@ title = file_name[file_name.rfind('/') + 1:].split(".",1)[0]
 # Window generation, pretty standard stuff. 
 window = tkinter.Tk()
 window.title(title)
-
-# Scrollbar testing
 title_and_legend_frame = tkinter.Frame(window)
 title_and_legend_scrollbar = tkinter.Scrollbar(title_and_legend_frame, orient = tkinter.HORIZONTAL)
 sequences_frame = tkinter.Frame(window)

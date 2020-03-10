@@ -10,7 +10,6 @@ Most of the changes that I am doing to this project will be documented in the fo
 
 ### Changed 
 
-* Now commits should be verified. Still in test.
 * Deleted parts of non-used code for the scrolling.
 
 ## [0.0.6]
